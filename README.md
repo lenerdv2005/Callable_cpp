@@ -13,27 +13,25 @@ Just include the header and use `Callable_c`: the arguments are
 ``` c++
 int test_function(int) { return 0; }
 
-std::cout << Callable_c<decltype(test_function), int, int> << std::endl;   // outputs: true
-std::cout << Callable_c<decltype(test_function), int, char> << std::endl;  // outputs: true (implicitly convertible)
-std::cout << Callable_c<decltype(test_function), int, void*> << std::endl; // outputs: false (void* is not implicitly convertible to int)
+std::cout << Callable_c<decltype(test_function), int(int)> << std::endl;   // outputs: true
+std::cout << Callable_c<decltype(test_function), int(char)> << std::endl;  // outputs: true (implicitly convertible)
+std::cout << Callable_c<decltype(test_function), int(void*)> << std::endl; // outputs: false (void* is not implicitly convertible to int)
 ```
 #### With `std::function`
 ``` c++
 std::function<void(int, int, std::string)> test_std_function;
 
-std::cout << Callable_c<decltype(test_std_function), void, int, int, std::string> << std::endl; // outputs: true
-std::cout << Callable_c<decltype(test_std_function), char, int, int, std::string> << std::endl; // outputs: false (char is not equal to int)
-std::cout << Callable_c<decltype(test_std_function), int, int, int, std::string> << std::endl;  // outputs: false (void is not equal to int)
+std::cout << Callable_c<decltype(test_std_function), void(int, int, std::string)> << std::endl; // outputs: true
+std::cout << Callable_c<decltype(test_std_function), char(int, int, std::string)> << std::endl; // outputs: false (char is not equal to int)
+std::cout << Callable_c<decltype(test_std_function), int(int, int, std::string)> << std::endl;  // outputs: false (void is not equal to int)
 ```
 #### With `std::bind`
 ``` c++
 auto test_bind = std::bind(test_function, std::placeholders::_1);
 
-std::cout << Callable_c<decltype(test_bind), int, int> << std::endl;   // outputs: true
-std::cout << Callable_c<decltype(test_bind), int, char> << std::endl;  // outputs: true (implicitly convertible)
-std::cout << Callable_c<decltype(test_bind), int, void*> << std::endl; // outputs: false (void* is not implicitly convertible to int)
+std::cout << Callable_c<decltype(test_bind), int(int)> << std::endl;   // outputs: true
+std::cout << Callable_c<decltype(test_bind), int(char)> << std::endl;  // outputs: true (implicitly convertible)
+std::cout << Callable_c<decltype(test_bind), int(void*)> << std::endl; // outputs: false (void* is not implicitly convertible to int)
 ```
 ## Differences from `std::invocable`
 What changes is that `Callable_c` also checks the return type. Although, unlike with arguments, which are accepted even if the type is implicitly convertible, the return type has to be exactly the same. If you want, you can just go to what is now line 27 (I know for a fact that I will forget to update this readme) and switch the `std::is_same_v` with `std::is_convertible_v`. Or use any other condition.
-## Can you help?
-AFAIK, the `Return_type(Arg_types...)` notation is not possible with concepts as it would require partial specializations, which AFAIK aren't a thing in concepts. If there's a way to do this, feel free to add a pull request.
