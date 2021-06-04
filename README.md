@@ -34,6 +34,6 @@ std::cout << Callable_c<decltype(test_bind), int, char> << std::endl;  // output
 std::cout << Callable_c<decltype(test_bind), int, void*> << std::endl; // outputs: false (void* is not implicitly convertible to int)
 ```
 ## Differences from `std::invocable`
-What changes is that `Callable_c` also checks the return type. Although, unlike with arguments, which are accepted even if the type is implicitly convertible, the return type has to be exactly the same. If you want, you can just go to what is now line 27 (I know for a fact that I will forget to update this readme) and switch the `std::is_same_v` with `std::is_convertible_v`. Plus you can do the opposite in the fold expression if you want argument types to match exactly, or use any other condition.
+What changes is that `Callable_c` also checks the return type. Although, unlike with arguments, which are accepted even if the type is implicitly convertible, the return type has to be exactly the same. If you want, you can just go to what is now line 27 (I know for a fact that I will forget to update this readme) and switch the `std::is_same_v` with `std::is_convertible_v`. Or use any other condition.
 ## Can you help?
 AFAIK, the `Return_type(Arg_types...)` notation is not possible with concepts as it would require partial specializations, which AFAIK aren't a thing in concepts. If there's a way to do this, feel free to add a pull request.
