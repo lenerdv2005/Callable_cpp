@@ -8,7 +8,9 @@ namespace concepts_and_types {
 		constexpr bool do_arg_types_match =
 			// basically: can i pass Arg_types to Type as if it were a function and not get a compiler error?
 			requires(Type function, Arg_types... arguments) {
-				function(arguments...);
+				((Type&&)function)(
+					(Arg_types&&)arguments...
+				);
 			}
 		;
 
